@@ -1,0 +1,526 @@
+title Nevercube [PuzzleScript ver.]
+author jjy
+homepage https://itch.io/xxx
+
+verbose_logging
+
+========
+OBJECTS
+========
+
+Background
+LIGHTGREY WHITE
+11111
+01111
+11101
+11111
+10111
+
+
+Wall
+BROWN DARKBROWN
+00010
+11111
+01000
+11111
+00010
+
+
+PlayerFree
+Green
+00.00
+0...0
+.....
+0...0
+00.00
+
+PlayerSelect
+Green
+00.00
+0...0
+.....
+0...0
+00.00
+
+FirstSelection
+Red
+00.00
+0...0
+.....
+0...0
+00.00
+
+Block0
+Yellow Brown Orange
+.222.
+20002
+20002
+20002
+.222.
+
+Block1
+Yellow Brown Orange
+.222.
+20002
+20102
+20002
+.222.
+
+Block2
+Yellow Brown Orange
+.222.
+20002
+21012
+20002
+.222.
+
+Block3
+Yellow Brown Orange
+.222.
+21002
+20102
+20012
+.222.
+
+Block4
+Yellow Brown Orange
+.222.
+21012
+20002
+21012
+.222.
+
+Block5
+Yellow Brown Orange
+.222.
+21012
+20102
+21012
+.222.
+
+BlockSelf
+Yellow Pink Orange
+.222.
+20102
+21012
+20102
+.222.
+
+BlockStone
+LightGrey DarkGrey Grey
+.222.
+20002
+20002
+20002
+.222.
+
+BlockTNT
+Yellow Orange Red
+.222.
+20102
+21012
+20102
+.222.
+
+BlockBombL
+Yellow Orange Red
+.222.
+20002
+21102
+20002
+.222.
+
+BlockBombR
+Yellow Orange Red
+.222.
+20002
+20112
+20002
+.222.
+
+BlockBombU
+Yellow Orange Red
+.222.
+20102
+20102
+20002
+.222.
+
+BlockBombD
+Yellow Orange Red
+.222.
+20002
+20102
+20102
+.222.
+
+BlockStoneH
+LightGrey DarkGrey Grey
+.222.
+20002
+21112
+20002
+.222.
+
+BlockStoneV
+LightGrey DarkGrey Grey
+.222.
+20102
+20102
+20102
+.222.
+
+BlockStoneHV
+LightGrey DarkGrey Grey
+.222.
+20102
+21112
+20102
+.222.
+
+BlockUnsupported
+Red Blue Black
+.222.
+21012
+20102
+21012
+.222.
+
+GravitySign
+White Purple
+00100
+00100
+11111
+01110
+00100
+
+FallingSign
+Transparent
+
+
+Indicator0
+Green
+.....
+..0..
+.000.
+..0..
+.....
+
+Indicator1
+Green
+.....
+..0..
+.000.
+..0..
+.....
+
+Indicator2
+Green
+.....
+..0..
+.000.
+..0..
+.....
+
+Indicator3
+Green
+.....
+..0..
+.000.
+..0..
+.....
+
+Indicator4
+Green
+.....
+..0..
+.000.
+..0..
+.....
+
+
+Indicator5
+Green
+.....
+..0..
+.000.
+..0..
+.....
+
+IndicatorInf
+Green
+.....
+..0..
+.000.
+..0..
+.....
+
+IndicatorExplosion
+Red
+.....
+.000.
+.000.
+.000.
+.....
+
+
+
+=======
+LEGEND
+=======
+
+. = Background
+# = Wall
+& = PlayerFree
+0 = Block0
+1 = Block1
+2 = Block2
+3 = Block3
+4 = Block4
+5 = Block5
+6 = BlockUnsupported
+7 = BlockUnsupported
+8 = BlockUnsupported
+9 = BlockUnsupported
+o = BlockUnsupported
+@ = BlockStone
+* = BlockSelf
+! = BlockTNT
+/ = BlockStoneV
+- = BlockStoneH
++ = BlockStoneHV
+^ = BlockBombU
+v = BlockBombD
+< = BlockBombL
+> = BlockBombR
+? = BlockUnsupported
+% = BlockUnsupported
+T = BlockUnsupported
+U = BlockUnsupported
+W = BlockUnsupported
+X = BlockUnsupported
+Y = BlockUnsupported
+Z = BlockUnsupported
+P = BlockUnsupported
+a = BlockUnsupported
+b = BlockUnsupported
+c = BlockUnsupported
+d = BlockUnsupported
+e = BlockUnsupported
+f = BlockUnsupported
+q = BlockUnsupported
+h = BlockUnsupported
+i = BlockUnsupported
+j = BlockUnsupported
+k = BlockUnsupported
+l = BlockUnsupported
+r = BlockUnsupported
+$ = GravitySign
+NumberBlock = Block0 or Block1 or Block2 or Block3 or Block4 or Block5
+Indicator = Indicator0 or Indicator1 or Indicator2 or Indicator3 or Indicator4 or Indicator5 or IndicatorInf
+UnremovableBlock = BlockStone or BlockStoneH or BlockStoneV or BlockStoneHV
+MovableH = BlockStoneH or BlockStoneHV
+MovableV = BlockStoneV or BlockStoneHV
+Movable = MovableH or MovableV
+ExplosiveLeft = BlockBombL
+ExplosiveRight = BlockBombR
+ExplosiveUp = BlockBombU
+ExplosiveDown = BlockBombD
+ExplosiveAllDirections = ExplosiveLeft or ExplosiveRight or ExplosiveUp or ExplosiveDown
+
+RemovableBlock = NumberBlock or BlockSelf or BlockTNT or ExplosiveAllDirections
+HardBlock = Wall
+SoftBlock = RemovableBlock or UnremovableBlock or BlockUnsupported
+Block = SoftBlock or HardBlock
+Player = PlayerFree or PlayerSelect
+
+=======
+SOUNDS
+=======
+
+
+
+================
+COLLISIONLAYERS
+================
+
+Background
+Block, GravitySign
+Player
+FirstSelection
+Indicator, IndicatorExplosion
+FallingSign
+
+======
+RULES
+======
+
+[ Indicator ] -> [ ]
+[ IndicatorExplosion SoftBlock ] -> [ ]
+[ IndicatorExplosion ] -> [ ]
+
+(second item selection)
+[ Action PlayerSelect Block0 | ... |  FirstSelection Block0 ] -> [ PlayerFree Indicator0 Block0 | ... | FirstSelection Block0 ]
+[ Action PlayerSelect Block1 | ... |  FirstSelection Block1 ] -> [ PlayerFree Indicator1 Block1 | ... | FirstSelection Block1 ]
+[ Action PlayerSelect Block2 | ... |  FirstSelection Block2 ] -> [ PlayerFree Indicator2 Block2 | ... | FirstSelection Block2 ]
+[ Action PlayerSelect Block3 | ... |  FirstSelection Block3 ] -> [ PlayerFree Indicator3 Block3 | ... | FirstSelection Block3 ]
+[ Action PlayerSelect Block4 | ... |  FirstSelection Block4 ] -> [ PlayerFree Indicator4 Block4 | ... | FirstSelection Block4 ]
+[ Action PlayerSelect Block5 | ... |  FirstSelection Block5 ] -> [ PlayerFree Indicator5 Block5 | ... | FirstSelection Block5 ]
+[ Action PlayerSelect FirstSelection ] -> [ PlayerFree ]
+[ Action PlayerSelect Block ] [ FirstSelection ] -> [ Action PlayerFree Block ] [ ]
+[ Action PlayerSelect Movable ] -> [ PlayerFree Movable ]
+
+(first item selection)
+[ Action PlayerFree NumberBlock ] -> [ PlayerSelect FirstSelection NumberBlock ]
+[ Action PlayerFree BlockSelf ] -> [ PlayerFree Indicator0 ] again
+[ Action PlayerFree BlockTNT | ] -> [ Action PlayerFree IndicatorExplosion BlockTNT | IndicatorExplosion ] again
+[ Action PlayerFree ExplosiveAllDirections ] -> [ PlayerFree IndicatorExplosion ExplosiveAllDirections ] again
+[ Action PlayerFree Movable ] -> [ PlayerSelect FirstSelection Movable]
+
+
+(movable operation)
+Left Right [ > PlayerSelect FirstSelection MovableH | no Block ] -> [ | PlayerSelect FirstSelection MovableH ]
+Up Down [ > PlayerSelect FirstSelection MovableV | no Block ] -> [ | PlayerSelect FirstSelection MovableV ]
+[ > PlayerSelect FirstSelection MovableH ] -> Cancel
+[ > PlayerSelect FirstSelection MovableV ] -> Cancel
+
+(indicator operation)
+startloop
+[ Indicator5 | SoftBlock | ... |  FirstSelection NumberBlock ] -> [ Indicator5 | SoftBlock Indicator4 | ... |  FirstSelection NumberBlock ]
+[ Indicator4 | SoftBlock | ... |  FirstSelection NumberBlock ] -> [ Indicator4 | SoftBlock Indicator3 | ... |  FirstSelection NumberBlock ]
+[ Indicator3 | SoftBlock | ... |  FirstSelection NumberBlock ] -> [ Indicator3 | SoftBlock Indicator2 | ... |  FirstSelection NumberBlock ]
+[ Indicator2 | SoftBlock | ... |  FirstSelection NumberBlock ] -> [ Indicator2 | SoftBlock Indicator1 | ... |  FirstSelection NumberBlock ]
+[ Indicator1 | SoftBlock | ... |  FirstSelection NumberBlock ] -> [ Indicator1 | SoftBlock Indicator0 | ... |  FirstSelection NumberBlock ]
+[ Indicator0 | SoftBlock | ... |  FirstSelection NumberBlock ] -> [ Indicator0 | SoftBlock IndicatorInf | ... |  FirstSelection NumberBlock ]
+[ Indicator | HardBlock | ... |  FirstSelection NumberBlock ] -> [ Indicator | IndicatorInf | ... |  FirstSelection NumberBlock ]
+[ Indicator | no Block | ... |  FirstSelection NumberBlock ] -> [ Indicator | Indicator | ... |  FirstSelection NumberBlock ]
+endloop
+
+startloop
+Left [ ExplosiveLeft IndicatorExplosion | no HardBlock ] -> [ ExplosiveLeft IndicatorExplosion | ExplosiveLeft IndicatorExplosion ]
+Right [ ExplosiveRight IndicatorExplosion | no HardBlock ] -> [ ExplosiveRight IndicatorExplosion | ExplosiveRight IndicatorExplosion ]
+Up [ ExplosiveUp IndicatorExplosion | no HardBlock ] -> [ ExplosiveUp IndicatorExplosion | ExplosiveUp IndicatorExplosion ]
+Down [ ExplosiveDown IndicatorExplosion | no HardBlock ] -> [ ExplosiveDown IndicatorExplosion | ExplosiveDown IndicatorExplosion ]
+endloop
+
+[ Indicator | FirstSelection NumberBlock ] -> [ Indicator | Indicator FirstSelection NumberBlock ]
+
+[ PlayerFree NumberBlock Indicator | ... | Indicator0 FirstSelection NumberBlock] -> [ PlayerFree Indicator | ... | Indicator0 ] again
+
+[ PlayerFree NumberBlock Indicator | ... | Indicator FirstSelection NumberBlock] -> [ PlayerFree NumberBlock Indicator | ... | Indicator NumberBlock] again 
+
+(gravity)
+late [ FallingSign ] -> [ ]
+late Down [ PlayerSelect FirstSelection SoftBlock no FallingSign | no Block ] [ GravitySign ] -> [ | PlayerSelect FirstSelection SoftBlock FallingSign ] [ GravitySign ] again
+late Down [ FirstSelection SoftBlock no FallingSign | no Block ] [ GravitySign ] -> [ | FirstSelection SoftBlock FallingSign ] [ GravitySign ] again
+late Down [ SoftBlock no FallingSign | no Block ] [ GravitySign ] -> [ | SoftBlock FallingSign ] [ GravitySign ] again
+
+
+==============
+WINCONDITIONS
+==============
+
+no RemovableBlock
+no Indicator
+
+=======
+LEVELS
+=======
+
+message level 1 of unknown
+
+&..........
+..00.......
+..1@1......
+..2@@2.....
+..3@@@3....
+...........
+...........
+...........
+...........
+...........
+...........
+
+message level 2 of unknown
+
+&..........
+..0.1@1.0..
+...........
+.....2.....
+...........
+..3.101.3..
+...........
+.....0.....
+...........
+..0.121.0..
+...........
+
+message level 3 of unknown
+
+&..........
+1*13111....
+*@*.1*1....
+1*10111....
+3.0*0.3....
+11101*1....
+1*1.*@*....
+11131*1....
+...........
+...........
+...........
+
+message level 4 of unknown
+
+&..........
+.1.........
+.22.12.....
+..1........
+3102032....
+..2.1......
+..1........
+...........
+...........
+...........
+...........
+
+message level 5 of unknown
+
+&..........
+.@3@5@3@...
+.4@3@2@4...
+.@2@1@2@...
+.1@1@1@1...
+.@3@1@3@...
+.5@3@2@5...
+.@3@5@3@...
+...........
+...........
+...........
+
+message level 6 of unknown
+
+&.3........
+.3!3.2.....
+..3.2!2.1..
+1....2.1!1.
+........1..
+...........
+...........
+...........
+...........
+...........
+...........
+
+message level 7 of unknown
+
+&..........
+...111.....
+..11!11....
+..1!!!1....
+..11!11....
+...111.....
+...........
+...........
+...........
+...........
+...........
